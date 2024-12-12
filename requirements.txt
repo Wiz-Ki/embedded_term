@@ -6,7 +6,7 @@ langchain-openai==0.2.10
 pip==24.2
 PyAudio==0.2.14
 pygame==2.6.1
-python-dotenv==1.0.1
+python-dotenv>=1.0.1
 sounddevice==0.5.1
 webrtcvad==2.0.10
 wheel==0.44.0
