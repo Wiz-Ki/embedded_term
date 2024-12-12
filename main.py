@@ -3,8 +3,11 @@ from AI_service_call import AISpeakerCall
 import tmp
 import tts
 from tmp import control_recording
+from keyword_spotting import start_wake_word_detection
 
 AI = AISpeakerCall()
+Detect_command = start_wake_word_detection()
+
 #input = input("AI요청: ")
 '''
 input = control_recording()
@@ -25,6 +28,23 @@ def AiCall():
     status = output['status']
     return status
 
+
+while True:
+
+    if Detect_command is True:
+        status = AiCall()
+
+        if status == "success":
+            break
+
+        else:
+            continue
+
+    else:
+        continue
+
+
+"""
 while True:
     status = AiCall()
 
@@ -33,3 +53,4 @@ while True:
 
     else:
         continue
+"""
