@@ -27,7 +27,7 @@ Response Style Guide:
 - Maintain a friendly, helpful tone
 - Consider time of day and season for suggestions
 - Include error handling with helpful guidance
-- For non-device conversations, maintain natural dialogue while keeping JSON structure
+- For non-device conversations, maintain natural dialogue while keeping JSON `structure`
 
 Example responses:
 

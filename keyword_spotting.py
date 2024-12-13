@@ -1,66 +1,108 @@
-import openwakeword
-from openwakeword.model import Model
-openwakeword.download_default_models()
-
-import sounddevice as sd
+import pyaudio
 import numpy as np
+from openwakeword.model import Model
 import time
 from playsound import playsound
 import threading
-import subprocess
-
 
 
 class WakeWordDetector:
     def __init__(self, detection_threshold=0.5):
-        #pretrain된 wakeup call 모델 사용
-        self.model = Model(wakeword_models=["hai_raje-beri.onnx"],
-                           inference_framework = "onnx"  # 여기를 수정
+        # 오디오 설정
+        self.CHUNK = 1280  # 공식 예제와 동일한 청크 사이즈
+        self.FORMAT = pyaudio.paInt16
+        self.CHANNELS = 1
+        self.RATE = 16000
+
+        # 모델 초기화
+        self.model = Model(
+            wakeword_models=["hey_jarvis"],
+            #wakeword_models=["hai_raje-beri.onnx"],
+            inference_framework="onnx"
         )
         self.detection_threshold = detection_threshold
         self.is_running = True
         self.alert_sound = "mixkit-correct-answer-tone-2870.wav"
         self.detected_command = None
 
-    def process_audio(self, indata, frames, time, status):
-        audio_data = indata.flatten().astype(np.float32)
-        predictions = self.model.predict(audio_data)
+        # PyAudio 초기화
+        self.audio = pyaudio.PyAudio()
 
-        if predictions[0] > self.detection_threshold:
-            threading.Thread(target=self.play_alert).start()
-            self.is_running = False
-            # 감지된 명령어에 따라 다른 값을 설정
-            # 예시로 첫번째 웨이크워드를 감지하면 'command1' 반환
-            self.detected_command = True
-
+    #sounddevice를 사용하여 소리 재생
     def play_alert(self):
         try:
-            playsound(self.alert_sound)
+            import sounddevice as sd
+            import soundfile as sf
+
+            # 알림음 파일 읽기
+            data, samplerate = sf.read(self.alert_sound)
+            sd.play(data, samplerate)
+            sd.wait()  # 소리가 끝날 때까지 대기
         except Exception as e:
             print(f"알림음 재생 에러: {e}")
 
     def start(self):
         try:
-            with sd.InputStream(callback=self.process_audio,
-                                channels=1,
-                                samplerate=16000,
-                                blocksize=480):
-                print("웨이크워드 감지 시작...")
-                while self.is_running:
-                    time.sleep(0.1)
-                print("웨이크워드 감지!")
-                return self.detected_command
+            # 마이크 스트림 열기
+            stream = self.audio.open(
+                format=self.FORMAT,
+                channels=self.CHANNELS,
+                rate=self.RATE,
+                input=True,
+                frames_per_buffer=self.CHUNK
+            )
+
+            print("웨이크워드 감지 시작...")
+
+            while self.is_running:
+                try:
+                    # 오디오 데이터 읽기
+                    audio_data = np.frombuffer(
+                        stream.read(self.CHUNK),
+                        dtype=np.int16
+                    )
+
+                    # 예측
+                    predictions = self.model.predict(audio_data)
+                    pred_value = predictions["hey_jarvis"]
+
+                    # 높은 값만 출력
+                    if pred_value > 0.1:  # 임계값 조정
+                        print(f"Prediction value: {pred_value:.4f}")
+
+                    # 웨이크워드 감지
+                    if pred_value > self.detection_threshold:
+                        print(f"Wake word detected! Confidence: {pred_value:.4f}")
+                        threading.Thread(target=self.play_alert).start()
+                        self.is_running = False
+                        self.detected_command = True
+                        break
+
+                    time.sleep(0.01)  # CPU 부하 감소
+
+                except Exception as e:
+                    print(f"프레임 처리 중 에러: {e}")
+                    continue
+
+            print("웨이크워드 감지!")
+            return self.detected_command
+
         except Exception as e:
             print(f"오디오 스트림 처리 에러: {e}")
             return None
 
+        finally:
+            # 스트림 정리
+            stream.stop_stream()
+            stream.close()
+            self.audio.terminate()
 
 
 def start_wake_word_detection():
-    sd.default.device = (1, None)
     detector = WakeWordDetector(detection_threshold=0.5)
     return detector.start()
 
 
-Detect_command = start_wake_word_detection()
-print(Detect_command)
+if __name__ == "__main__":
+    Detect_command = start_wake_word_detection()
+    print(Detect_command)

@@ -46,7 +46,8 @@ while True:
 
 """
 while True:
-    status = AiCall()
+    status = AiCall()2
+    
 
     if status == "success":
         break
