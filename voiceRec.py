@@ -14,7 +14,7 @@ def save_audio(audio_data, output_filename):
     with open(output_filename, "wb") as f:
         f.write(audio_data.get_wav_data())
 
-def main():
+def voice_REC():
     recognizer = sr.Recognizer()
     mic = sr.Microphone()
 
@@ -56,4 +56,4 @@ def main():
         print("녹음된 내용이 없어 저장하지 않습니다.")
 
 if __name__ == "__main__":
-    main()
+    voice_REC()

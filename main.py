@@ -4,8 +4,11 @@ import tmp
 #import tts
 #from tmp import control_recording
 from STT import control_recording
+from voiceRec import voice_REC
 from keyword_spotting import start_wake_word_detection
 from tts import TTS
+
+
 AI = AISpeakerCall()
 #Detect_command = start_wake_word_detection()
 
@@ -17,6 +20,8 @@ output = AI.process_conversation(input)
 
 #print(output)
 def AiCall():
+
+    voice_REC()
     input = control_recording()
     output = AI.process_conversation(input)
 
