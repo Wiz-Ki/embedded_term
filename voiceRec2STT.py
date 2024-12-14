@@ -1,4 +1,5 @@
 import sounddevice as sd
+import soundfile as sf
 import numpy as np
 import wave
 import os
@@ -29,7 +30,7 @@ def is_silent(audio_chunk, threshold):
     return rms < threshold
 
 
-def transcribe_audio(filename, model_size="small"):
+def transcribe_audio(filename, model_size="base"):
     """WhisperModel을 사용하여 음성을 텍스트로 변환"""
     print(f"음성을 텍스트로 변환중...")
     model = WhisperModel(model_size, device="cpu", compute_type="int8")
@@ -51,8 +52,21 @@ def transcribe_audio(filename, model_size="small"):
 
     return "".join(result)
 
+def play_alert(alert_sound):
+    try:
+        import sounddevice as sd
+        import soundfile as sf
+
+        # 알림음 파일 읽기
+        data, samplerate = sf.read(alert_sound)
+        sd.play(data, samplerate)
+        sd.wait()  # 소리가 끝날 때까지 대기
+    except Exception as e:
+        print(f"알림음 재생 에러: {e}")
+
 
 def record_audio():
+    alert_sound = "mixkit-software-interface-start-2574.wav"
     """향상된 무음 감지 기능을 포함한 음성 녹음"""
     print("녹음을 시작합니다. 2초 동안 음성이 감지되지 않으면 자동으로 저장됩니다.")
 
@@ -129,6 +143,7 @@ def record_audio():
                 if is_recording and silence_frames >= total_silence_frames:
                     if voice_detected:  # 실제 음성이 감지된 경우에만 종료
                         print("무음이 감지되어 녹음을 종료합니다.")
+                        play_alert(alert_sound)
                         break
 
         except KeyboardInterrupt:
