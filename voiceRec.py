@@ -47,8 +47,9 @@ def main():
 
     # 파일 저장
     if recording and audio_data:
-        timestamp = time.strftime("%Y%m%d-%H%M%S")
-        filename = os.path.join(OUTPUT_DIR, f"recording_{timestamp}.wav")
+        #timestamp = time.strftime("%Y%m%d-%H%M%S")
+        #filename = os.path.join(OUTPUT_DIR, f"recording_{timestamp}.wav")
+        filename = os.path.join(OUTPUT_DIR, f"command_voice.wav")
         save_audio(audio_data, filename)
         print(f"녹음이 저장되었습니다: {filename}")
     else:

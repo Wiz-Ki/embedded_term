@@ -23,9 +23,6 @@ def start_recording():
 
 # 녹음 종료 함수
 def stop_recording():
-    global recording
-    recording = False
-    print("Recording stopped. Saving...")
     # WAV 파일 저장
     with wave.open(OUTPUT_FILENAME, 'wb') as wf:
         wf.setnchannels(CHANNELS)
@@ -63,21 +60,7 @@ def transcribe_audio(filename, model_size="base"):
 
 # 녹음 제어 함수
 def control_recording():
-    global recording
-
-    while True:
-        command = input("Press 's' to start recording, 'e' to stop, or 'q' to quit: ").strip().lower()
-        if command == "s" and not recording:
-            threading.Thread(target=start_recording).start()  # 녹음을 별도 스레드에서 실행
-        elif command == "e" and recording:
-            return stop_recording()  # 녹음 종료 + STT 실행
-        elif command == "q":
-            if recording:
-                return stop_recording()  # 녹음 중이라면 종료
-            print("Exiting")
-            break
-        else:
-            print("Invalid command. Use 's' to start, 'e' to stop, or 'q' to quit.")
+    transcribe_audio(OUTPUT_FILENAME)
 
 # result = control_recording()
 # print("result" , result)
