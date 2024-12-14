@@ -1,10 +1,10 @@
 import AI_service_call
 from AI_service_call import AISpeakerCall
 import tmp
-import tts
+#import tts
 from tmp import control_recording
 from keyword_spotting import start_wake_word_detection
-
+from tts import TTS
 AI = AISpeakerCall()
 #Detect_command = start_wake_word_detection()
 
@@ -26,8 +26,11 @@ def AiCall():
     print(f"status: {output['status']}")
 
     status = output['status']
+    TTS(output['response'])
+
     return status
 
+    
 
 while True:
 
@@ -40,5 +43,4 @@ while True:
         # if status == "success":
         #     print(f"Detect_command:{Detect_command}")
         #     continue
-
 
