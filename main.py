@@ -1,10 +1,11 @@
 import AI_service_call
 from AI_service_call import AISpeakerCall
-import tmp
+#import tmp
 #import tts
 #from tmp import control_recording
-from STT import control_recording
-from voiceRec import voice_REC
+from voiceRec2STT import voice_record_and_transcribe as voice2STT
+#from STT import control_recording
+#from voiceRec import voice_REC
 from keyword_spotting import start_wake_word_detection
 from tts import TTS
 
@@ -21,8 +22,9 @@ output = AI.process_conversation(input)
 #print(output)
 def AiCall():
 
-    voice_REC()
-    input = control_recording()
+#    voice_REC()
+#    input = control_recording()
+    input = voice2STT()
     output = AI.process_conversation(input)
 
     print(f"response: {output['response']}")

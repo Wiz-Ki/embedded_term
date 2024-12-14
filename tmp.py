@@ -39,7 +39,7 @@ def stop_recording():
 
 # STT 추론 함수
 # model_size="tiny", "base", "small", "medium", "large-v3"
-def transcribe_audio(filename, model_size="base"):
+def transcribe_audio(filename, model_size="large-v3"):
     print(f"Transcribing {filename}...")
     model = WhisperModel(model_size, device="cpu", compute_type="int8")  # CPU에서 실행
 
@@ -79,5 +79,8 @@ def control_recording():
         else:
             print("Invalid command. Use 's' to start, 'e' to stop, or 'q' to quit.")
 
-# result = control_recording()
-# print("result" , result)
+result = control_recording()
+print("result" , result)
+
+if __name__ == "__main__":
+    control_recording()
