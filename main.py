@@ -40,22 +40,5 @@ while True:
         # if status == "success":
         #     print(f"Detect_command:{Detect_command}")
         #     continue
-'''
-        else:
-            continue
 
-    else:
-        continue
-'''
 
-"""
-while True:
-    status = AiCall()2
-    
-
-    if status == "success":
-        break
-
-    else:
-        continue
-"""
