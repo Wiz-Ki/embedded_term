@@ -16,8 +16,8 @@ class WakeWordDetector:
 
         # 모델 초기화
         self.model = Model(
-            wakeword_models=["hey_jarvis"],
-            #wakeword_models=["hai_raje-beri.onnx"],
+            #wakeword_models=["hey_jarvis"],
+            wakeword_models=["hai_raje-beri.onnx"],
             inference_framework="onnx"
         )
         self.detection_threshold = detection_threshold
@@ -64,7 +64,7 @@ class WakeWordDetector:
 
                     # 예측
                     predictions = self.model.predict(audio_data)
-                    pred_value = predictions["hey_jarvis"]
+                    pred_value = predictions["hai_raje-beri"]
 
                     # 높은 값만 출력
                     if pred_value > 0.1:  # 임계값 조정

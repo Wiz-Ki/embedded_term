@@ -6,7 +6,7 @@ from tmp import control_recording
 from keyword_spotting import start_wake_word_detection
 
 AI = AISpeakerCall()
-Detect_command = start_wake_word_detection()
+#Detect_command = start_wake_word_detection()
 
 #input = input("AI요청: ")
 '''
@@ -31,18 +31,22 @@ def AiCall():
 
 while True:
 
+    Detect_command = start_wake_word_detection()
+
     if Detect_command is True:
         status = AiCall()
+        Detect_command = False
 
-        if status == "success":
-            break
-
+        # if status == "success":
+        #     print(f"Detect_command:{Detect_command}")
+        #     continue
+'''
         else:
             continue
 
     else:
         continue
-
+'''
 
 """
 while True:

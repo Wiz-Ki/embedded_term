@@ -64,6 +64,7 @@ def transcribe_audio(filename, model_size="base"):
 # 녹음 제어 함수
 def control_recording():
     global recording
+
     while True:
         command = input("Press 's' to start recording, 'e' to stop, or 'q' to quit: ").strip().lower()
         if command == "s" and not recording:
