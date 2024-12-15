@@ -17,7 +17,7 @@ class WakeWordDetector:
         # 모델 초기화
         self.model = Model(
             #wakeword_models=["hey_jarvis"],
-            wakeword_models=["hai_raje-beri.onnx"],
+            wakeword_models=["hai_raje-beri.onnx", "hai_larje-beri.onnx"],
             inference_framework="onnx"
         )
         self.detection_threshold = detection_threshold
