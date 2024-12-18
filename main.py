@@ -8,6 +8,11 @@ from voiceRec2STT import voice_record_and_transcribe as voice2STT
 #from voiceRec import voice_REC
 from keyword_spotting import start_wake_word_detection
 from tts import TTS
+import openwakeword
+#from controlLED import control_led
+from openwakeword.model import Model
+openwakeword.utils.download_models()
+
 
 
 AI = AISpeakerCall()
@@ -34,6 +39,7 @@ def AiCall():
     print(f"status: {output['status']}")
 
     status = output['status']
+#    control_led(output["device"], output["action"])
     TTS(output['response'])
 
     return status
